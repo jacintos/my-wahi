@@ -15,16 +15,21 @@
 <%def name="description()">
 <meta name="description" content="Save your points of interest." />
 </%def>
-<link rel="stylesheet" type="text/css" href="/css/main.css" media="screen, projection" />
+<%def name="meta()"></%def>
+${self.keywords()}
+${self.description()}
+${self.meta()}
 <link rel="stylesheet" type="text/css" href="/css/blueprint/screen.css" media="screen, projection" />
 <link rel="stylesheet" type="text/css" href="/css/blueprint/print.css" media="print" />
+<%def name="stylesheets()"></%def>
+${self.stylesheets()}
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="/css/blueprint/ie.css" media="screen, projection" />
 <![endif]-->
+<link rel="stylesheet" type="text/css" href="/css/main.css" media="screen, projection" />
 <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
-<%def name="title()">
-<title>My Wahi</title>
-</%def>
+<%def name="title()">My Wahi</%def>
+<title>${self.title()}</title>
 </head>
 <body>
 <div id="hd">
@@ -36,4 +41,6 @@ ${self.body()}
 &copy; 2009 Jacinto Ximénez de Guzmán
 </div><!-- /ft -->
 </body>
+<%def name="javascripts()"></%def>
+${self.javascripts()}
 </html>

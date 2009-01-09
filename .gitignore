@@ -3,4 +3,3 @@ syntax: glob
 *~
 mako
 web
-css/blueprint
