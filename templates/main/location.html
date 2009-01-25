@@ -1,0 +1,33 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/index.html" />
+<%def name="html()">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xml:lang="en">
+</%def>
+<%def name="meta()">
+<meta name="ICBM" content="${coords[1]}, ${coords[0]}" />
+<meta name="geo.position" content="${coords[1]};${coords[0]}" />
+</%def>
+<%def name="stylesheets()">
+<link rel="stylesheet" type="text/css" href="/css/openlayers/style.css" media="screen, projection" />
+</%def>
+<div style="height:400px; width:950px; margin-top: 12px;" id="map"></div>
+<p>
+  (<span rel="geo:long">${coords[0]}</span>, 
+  <span rel="geo:lat">${coords[1]}</span>)
+</p>
+<%def name="javascripts()">
+<script type="text/javascript">
+//<![CDATA[
+google.load("maps", "2.x");
+//]]>
+</script>
+<script type="text/javascript" src="/js/openlayers.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$("#map").mapify(${coords[0]}, ${coords[1]});
+//]]>
+</script>
+</%def>

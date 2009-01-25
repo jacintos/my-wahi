@@ -4,6 +4,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 </%def>
+${self.html()}
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -58,8 +59,8 @@ ${self.body()}
 google.load("jquery", "1");
 //]]>
 </script>
-<script type="text/javascript" src="/js/wahi.js"></script>
 <script type="text/javascript" src="/js/geohash.js"></script>
+<script type="text/javascript" src="/js/wahi.js"></script>
 <%def name="javascripts()"></%def>
 ${self.javascripts()}
 <script type="text/javascript">
@@ -90,7 +91,7 @@ $(document).ready(function() {
     $("a.search-location").live("click", function() {
         var coords = $(this).data("coords");
         var hash = encodeGeoHash(coords[1], coords[0]);
-        console.log("Created geohash: " + hash);
+        window.location = "/loc/" + hash;
         return false;
     });
 });

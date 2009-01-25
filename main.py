@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import web
+from geohash import Geohash
 from web.contrib.template import render_mako
 
 #web.config.debug = False
 
 urls = (
+    '/loc/(.*)', 'location',
     '/(.*)', 'index',
 )
 
@@ -23,6 +25,13 @@ class index(object):
 
     def GET(self, name):
         return render('main/index')
+
+
+class location(object):
+
+    def GET(self, loc_hash):
+        coords = Geohash(loc_hash).point()
+        return render('main/location', coords=coords)
 
 
 if __name__ == '__main__':
