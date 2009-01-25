@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
-<meta name="author" content="Jacinto Ximénez de Guzmán" />
-<meta name="copyright" content="&copy; 2009 Jacinto Ximénez de Guzmán" />
+<meta name="author" content="Jacinto Shy, Jr." />
+<meta name="copyright" content="&copy; 2009 Jacinto Shy, Jr." />
 <%def name="keywords()">
 <meta name="keywords" content="POI, point of interest, geoweb, geolocation, location" />
 </%def>
@@ -32,15 +32,68 @@ ${self.stylesheets()}
 <title>${self.title()}</title>
 </head>
 <body>
-<div id="hd">
-</div><!-- /hd -->
-<div id="bd">
+<div id="container">
+  <div id="hd" class="span-24 last">
+    <div class="span-12">
+      <h1>My Wahi</h1>
+    </div>
+    <div id="hd-2" class="span-12 last">
+      <form action="#" id="location-search">
+	<input type="text" class="text" /><button type="submit">Search</button>
+      </form>
+      <div id="location-results"></div>
+    </div>
+  </div><!-- /hd -->
+  <div id="bd" class="span-24 last">
 ${self.body()}
-</div><!-- /bd -->
-<div id="ft">
-&copy; 2009 Jacinto Ximénez de Guzmán
-</div><!-- /ft -->
+  </div><!-- /bd -->
+  <div id="ft" class="span-24 last">
+    &copy; 2009 Jacinto Shy, Jr.
+  </div><!-- /ft -->
+</div>
 </body>
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAnnh3vADukoSiGDyFNhOAihT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRFihSNGE3faXJghnYraM8YXUr8aQ"></script>
+<script type="text/javascript">
+//<![CDATA[
+google.load("jquery", "1");
+//]]>
+</script>
+<script type="text/javascript" src="/js/wahi.js"></script>
+<script type="text/javascript" src="/js/geohash.js"></script>
 <%def name="javascripts()"></%def>
 ${self.javascripts()}
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    var searchText = "Where on earth is it?";
+
+    $("#location-search").submit(function() {
+        if ($("#location-results").css("display") != "none")
+            $("#location-results").css("display", "none").empty();
+        $("#location-search > input.text").searchForLoc(function(locs) {
+            $("#location-results").append(locs.length + " result(s) found<br/>");
+            locs.forEach(function(loc) {
+                $("#location-results").append("<a class='search-location' href='#'>" + loc.address + "</a><br/>");
+                $("#location-results a:last").data("coords", loc.coords);
+            });
+            $("#location-results").css("display", "block");
+        });
+        return false;
+    });
+    $("#location-search > input.text").focus(function() {
+        if ($(this).val() == searchText)
+            $(this).val("");
+    }).blur(function() {
+        if ($(this).val() == "")
+            $(this).val(searchText);
+    }).val(searchText);
+    $("a.search-location").live("click", function() {
+        var coords = $(this).data("coords");
+        var hash = encodeGeoHash(coords[1], coords[0]);
+        console.log("Created geohash: " + hash);
+        return false;
+    });
+});
+//]]>
+</script>
 </html>

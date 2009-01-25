@@ -3,3 +3,88 @@ body {
     margin: 0 auto;
     width: 950px;
 }
+
+#hd-2 {
+    height: 32px;
+    margin-top: 8px;
+    position: relative;
+}
+
+#location-search {
+    float: right;
+    padding: 0;
+}
+
+#location-search > input.text {
+    height: 32px;
+    line-height: 32px;
+    margin: 0;
+    padding: 4px 0 0 0;
+}
+
+#location-search > button {
+    background-color: #f5f5f5;
+    border: 1px solid #bbb;
+    border-left: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    cursor: pointer;
+    height: 32px;
+    line-height: 32px;
+    margin: 0 0 0 10px;
+    width: 80px;
+}
+
+#location-results {
+    background: transparent url(/img/white.png);
+    display: none;
+    left: 80px;
+    padding: 6px 4px 6px 4px;
+    position: absolute;
+    top: 32px;
+    width: 300px;
+    z-index: 10;
+}
+
+#location-results ul {
+    list-style-type: none;
+}
+
+#main-img {
+    background: white url(/img/palacio_real.jpg);
+    height:332px;
+    position: relative;
+}
+
+#main-img > div.title {
+    background: transparent url(/img/black.png);
+    height: 40px;
+    width: 100%;
+}
+
+#main-img > div.attrib {
+    bottom: 0px;
+    line-height: 17px;
+    position: absolute;
+    right: 0px;
+}
+
+div.attrib > a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.attrib > a:hover {
+    text-decoration: underline;
+}
+
+#main-img h2 {
+    color: white;
+    padding-left: 1em;
+}
+
+input.text, textarea {
+    background: white url(http://static2.dokiru.com/inputbg.png) repeat-x scroll top left;
+    font-size: 1.4em;
+    letter-spacing: 0.02em;
+}
