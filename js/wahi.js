@@ -4,6 +4,7 @@
     var mapOptions;
     var map;
     var pointer, pointerLayer;
+    var popup;
     var selLocCallback;
 
     $.fn.searchForLoc = function(fn) {
@@ -52,7 +53,6 @@
             map = new OpenLayers.Map(this.attr("id"), mapOptions);
             map.addLayer(baseLayer);
             map.setCenter(coords, 10);
-            //map.zoomToMaxExtent();
         } else {
             console.log("Incompatible with Google maps");
         }
@@ -94,6 +94,24 @@
                 fn(resp.Placemark);
             }
         });
+    };
+
+    $.promptDialog = function(content) {
+        var pixel = new OpenLayers.Pixel(940, 50);
+        var coords = map.getLonLatFromViewPortPx(pixel);
+
+        if (!popup) {
+            var size = new OpenLayers.Size(270, 100);
+
+            popup = new OpenLayers.Popup.Anchored("prompt", coords, size, content, null, true, function() {this.hide()});
+            popup.setOpacity(0.8);
+            map.addPopup(popup);
+        } else {
+            popup.hide();
+            popup.lonlat = coords;
+            popup.contentHTML = content;
+            popup.show();
+        }
     };
 
     function registerClickHandler() {

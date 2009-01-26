@@ -32,6 +32,9 @@ $(document).ready(function() {
     $("#map").mapify(${coords[0]}, ${coords[1]}, function(lon, lat) {
         $("#coords-long").text(lon.toFixed(6));
         $("#coords-lat").text(lat.toFixed(6));
+
+        var content = "<h2>Bookmark this place?</h2><div><button style='margin-right:12px' type='submit'>Yes</button> <button type='submit'>No</button></div>";
+        $.promptDialog(content);
     });
     $("#tmp-coords").clone().attr("id", "loc-coords").prependTo("#map").css({
         "font-family" : "Arial, sans-serif",

@@ -22,12 +22,15 @@ body {
     padding: 4px 0 0 0;
 }
 
-#location-search > button {
+button {
     background-color: #f5f5f5;
     border: 1px solid #bbb;
     border-left: 2px solid #bbb;
     border-bottom: 2px solid #bbb;
     cursor: pointer;
+}
+
+#location-search > button {
     height: 32px;
     line-height: 32px;
     margin: 0 0 0 10px;
@@ -108,7 +111,7 @@ div.attrib > a:hover {
 }
 
 input.text, textarea {
-    background: white url(http://static2.dokiru.com/inputbg.png) repeat-x scroll top left;
+    background: white url(/img/inputbg.png) repeat-x scroll top left;
     font-size: 1.4em;
     letter-spacing: 0.02em;
 }
@@ -121,4 +124,23 @@ input.text, textarea {
 #ft ul > li  {
     float: right;
     padding-left: 8px;
+}
+
+#map .olPopupContent > h2 {
+    color: #333;
+}
+
+#map .olPopupContent > div {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#map .olPopupContent button {
+    opacity: 1;
+    padding: 2px 4px;
+    width: 60px;
+}
+
+#map .olPopupCloseBox {
+    background: transparent url(/img/close.png);
 }
