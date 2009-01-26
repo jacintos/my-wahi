@@ -55,7 +55,21 @@ body {
     position: relative;
 }
 
-#main-img > div.title {
+#map {
+    height: 400px;
+    margin-top: 12px;
+    position: relative;
+    width: 950px;
+}
+
+#map > div.title {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 9999;
+}
+
+#main-img > div.title, #map > div.title {
     background: transparent url(/img/black.png);
     height: 40px;
     width: 100%;
@@ -78,7 +92,7 @@ div.attrib > a:hover {
     text-decoration: underline;
 }
 
-#main-img h2 {
+#main-img h2, #map h2 {
     color: white;
     padding-left: 1em;
 }
