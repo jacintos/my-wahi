@@ -16,8 +16,8 @@ body {
 }
 
 #location-search > input.text {
-    height: 32px;
-    line-height: 32px;
+    height: 26px;
+    line-height: 26px;
     margin: 0;
     padding: 4px 0 0 0;
 }
@@ -38,7 +38,8 @@ body {
     background: transparent url(/img/white.png);
     display: none;
     left: 80px;
-    padding: 6px 4px 6px 4px;
+    /*padding: 6px 4px 6px 4px;*/
+    padding-top: 6px;
     position: absolute;
     top: 32px;
     width: 300px;
@@ -76,15 +77,24 @@ body {
 }
 
 #main-img > div.attrib {
+    background: transparent url(/img/black.png);
     bottom: 0px;
-    line-height: 17px;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 2px 0 2px;
     position: absolute;
     right: 0px;
 }
 
+div.attrib > img {
+    float: left;
+    padding-top: 3px;
+}
+
 div.attrib > a {
-    color: black;
-    font-weight: bold;
+    color: white;
+    float: left;
+    padding-left: 2px;
     text-decoration: none;
 }
 
@@ -101,4 +111,14 @@ input.text, textarea {
     background: white url(http://static2.dokiru.com/inputbg.png) repeat-x scroll top left;
     font-size: 1.4em;
     letter-spacing: 0.02em;
+}
+
+#ft ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+#ft ul > li  {
+    float: right;
+    padding-left: 8px;
 }

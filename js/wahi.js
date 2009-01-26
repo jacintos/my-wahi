@@ -4,6 +4,7 @@
     var mapOptions;
     var map;
     var pointer, pointerLayer;
+    var selLocCallback;
 
     $.fn.searchForLoc = function(fn) {
         return this.each(function() {
@@ -33,7 +34,7 @@
         });
     };
 
-    $.fn.mapify = function(lon, lat) {
+    $.fn.mapify = function(lon, lat, fn) {
         mapOptions = {
             projection: new OpenLayers.Projection("EPSG:4326"),
             displayProjection: new OpenLayers.Projection("EPSG:900913"),
@@ -55,28 +56,9 @@
         } else {
             console.log("Incompatible with Google maps");
         }
-
         $.pointToLoc(new OpenLayers.Geometry.Point(coords.lon, coords.lat));
-
-
-        var handler = new OpenLayers.Handler.Click({map : map}, {
-            click : function(e) {
-                var coords = map.getLonLatFromViewPortPx(e.xy);
-                var point = new OpenLayers.Geometry.Point(coords.lon, coords.lat)
-                $.pointToLoc(point);
-            },
-            dblclick : function() {
-                console.log("Map was double clicked");
-            }
-        }, {
-            single : true,
-            "double" : true,
-            stopSingle : true,
-            stopDouble : true
-        });
-        handler.setMap(map);
-        handler.activate();
-
+        selLocCallback = fn;
+        registerClickHandler();
         return this;
     };
 
@@ -113,5 +95,29 @@
             }
         });
     };
+
+    function registerClickHandler() {
+        var handler = new OpenLayers.Handler.Click({map : map}, {
+            click : function(e) {
+                var coords = map.getLonLatFromViewPortPx(e.xy);
+                var point = new OpenLayers.Geometry.Point(coords.lon, coords.lat)
+                $.pointToLoc(point);
+                if (selLocCallback) {
+                    coords.transform(mapOptions.displayProjection, mapOptions.projection);
+                    selLocCallback(coords.lon, coords.lat);
+                }
+            },
+            dblclick : function() {
+                console.log("Map was double clicked");
+            }
+        }, {
+            single : true,
+            "double" : true,
+            stopSingle : true,
+            stopDouble : true
+        });
+        handler.setMap(map);
+        handler.activate();
+    }
 
 })(jQuery);

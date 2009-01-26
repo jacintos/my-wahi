@@ -14,10 +14,11 @@
 <link rel="stylesheet" type="text/css" href="/css/openlayers/style.css" media="screen, projection" />
 </%def>
 <div id="map"></div>
-<p>
-  (<span rel="geo:long">${coords[0]}</span>, 
-  <span rel="geo:lat">${coords[1]}</span>)
-</p>
+<div id="tmp-coords">
+  Coordinates:
+  (<span id="coords-long" rel="geo:long">${coords[0]}</span>, 
+  <span id="coords-lat" rel="geo:lat">${coords[1]}</span>)
+</div>
 <%def name="javascripts()">
 <script type="text/javascript">
 //<![CDATA[
@@ -28,7 +29,20 @@ google.load("maps", "2.x");
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    $("#map").mapify(${coords[0]}, ${coords[1]});
+    $("#map").mapify(${coords[0]}, ${coords[1]}, function(lon, lat) {
+        $("#coords-long").text(lon.toFixed(6));
+        $("#coords-lat").text(lat.toFixed(6));
+    });
+    $("#tmp-coords").clone().attr("id", "loc-coords").prependTo("#map").css({
+        "font-family" : "Arial, sans-serif",
+        "font-size" : "11px",
+        color : "black",
+        position : "absolute",
+        bottom : "0",
+        right : "3px",
+        "z-index" : "9999"
+    });
+    $("#tmp-coords").remove();
     $.reverseGeocode(${coords[0]}, ${coords[1]}, function(placemarks) {
         $("#map").prepend("<div class='title'><h2>" + placemarks[0].address + "</h2></div>");
     });
