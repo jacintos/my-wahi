@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import cgi, web
+from django.utils import simplejson 
 from geohash import Geohash
+from google.appengine.api import urlfetch
 from models import Place
+from urllib import quote, urlencode
 from web.contrib.template import render_mako
 from web import form, seeother
 
@@ -54,6 +57,9 @@ class place(object):
         form.Textbox('longitude'),
         form.Textbox('latitude'))
 
+    mylogin = 'jacintos'
+    myapikey = 'R_2555944778356e8a2fa1c15f33b8e3f9'
+
     def GET(self, model_id):
         place = Place.get_by_id(int(model_id))
         if place is None:
@@ -65,8 +71,8 @@ class place(object):
         f = place.myform()
         if f.validates():
             coords = float(f.d.get('longitude')), float(f.d.get('latitude'))
-            login = f.d.get('bitly_login')
-            apikey = f.d.get('bitly_apikey')
+            login = f.d.get('bitly_login') or place.mylogin
+            apikey = f.d.get('bitly_apikey') or place.myapikey
 
             p = Place()
             p.name = cgi.escape(f.d.get('name'))
@@ -78,12 +84,25 @@ class place(object):
             model_id = p.key().id()
             url = web.ctx.home + '/place/' + str(model_id)
             p.bitly_hash = self._bitly_hash(url, login, apikey)
+            p.put()
         else:
             pass
         raise seeother(url)
 
     def _bitly_hash(self, url, login, apikey):
-        pass
+        opts = {
+            'longUrl' : url,
+            'login' : login,
+            'apiKey' : apikey,
+            'format' : 'json',
+            'version' : '2.0.1'
+        }
+        base = 'http://api.bit.ly/shorten?'
+        resp = urlfetch.fetch(base + urlencode(opts))
+        if resp.status_code == 200:
+            content = simplejson.loads(resp.content)
+            if content.get('statusCode') == 'OK':
+                return content['results'][url].get('userHash')
 
 
 if __name__ == '__main__':
