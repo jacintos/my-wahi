@@ -37,12 +37,6 @@ button {
     width: 80px;
 }
 
-#save-bookmark button {
-    float: left;
-    padding: 4px 0;
-    width: 90px;
-}
-
 #location-results {
     background: transparent url(/img/white.png);
     display: none;
@@ -122,6 +116,7 @@ input.text, textarea.text {
     font-size: 1.4em;
     font-weight: bold;
     letter-spacing: 0.03em;
+    margin-top: 0;
 }
 
 #ft ul {
@@ -152,6 +147,17 @@ input.text, textarea.text {
     background: transparent url(/img/close.png);
 }
 
+#save-bookmark button {
+    float: left;
+    margin-top: 0.5em;
+    padding: 4px 0;
+    width: 90px;
+}
+
+#save-bookmark > h2 {
+    margin-bottom: 0.25em;
+}
+
 #save-bookmark label {
     font-family: Helvetica, sans-serif;
     font-size: 1.2em;
@@ -163,4 +169,13 @@ input.text, textarea.text {
 
 #save-bookmark textarea.text {
     height: 100px;
+}
+
+#toggle-bitly {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none;
 }

@@ -13,9 +13,9 @@
 <%def name="stylesheets()">
 <link rel="stylesheet" type="text/css" href="/css/openlayers/style.css" media="screen, projection" />
 </%def>
-<div id="save-bookmark" class="span-8" style="display:none;">
-  <h2>Save Bookmark</h2>
-  <form action="/save" method="post">
+<div id="save-bookmark" class="hidden span-8">
+  <h2>Bookmark Place</h2>
+  <form action="/place" method="post">
     <label for="name">Name</label>
     <input class="text" type="text" name="name" id="name" />
   <br/>
@@ -25,7 +25,17 @@
     <label for="description">Description <span style="font-size:0.8em;font-weight:normal;">(optional)</span></label>
     <textarea class="text" name="description" id="description"></textarea>
   <br/>
+  <label id="toggle-bitly">Bookmark with bit.ly <span style="font-size:0.8em;font-weight:normal;">(optional)</span></label>
+  <div id="bitly-settings" class="hidden">
+    <label for="bitly_login">Login</label>
+    <input class="text" type="text" name="bitly_login" id="bitly_login" />
+  <br/>
+    <label for="bitly_apikey">API key</label>
+    <input class="text" type="password" name="bitly_apikey" id="bitly_apikey" />
+  </div>
     <button style="margin-right:4px;" type="submit">Bookmark</button>
+    <input type="hidden" name="longitude" />
+    <input type="hidden" name="latitude" />
   </form>
   <button id="cancel-bookmark">Cancel</button>
 </div>
@@ -94,6 +104,14 @@ $(document).ready(function() {
         $("#map").prepend("<div class='title'><h2>" + placemarks[0].address + "</h2></div>");
     });
     $("#cancel-bookmark").click(resetFullMap);
+    $("#save-bookmark > form").submit(function() {
+        $("input[name=longitude]").val($("#coords-long").text());
+        $("input[name=latitude]").val($("#coords-lat").text());
+        return true;
+    });
+    $("#toggle-bitly").click(function() {
+        $("#bitly-settings").toggleClass("hidden");
+    });
 });
 //]]>
 </script>

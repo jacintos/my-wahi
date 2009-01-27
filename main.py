@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import web
+import cgi, web
 from geohash import Geohash
+from models import Place
 from web.contrib.template import render_mako
+from web import form, seeother
 
 #web.config.debug = False
 
 urls = (
     '/loc/(.*)', 'location',
+    '/place', 'place',
+    '/place/(\d+)', 'place',
     '/(.*)', 'index',
 )
 
@@ -24,7 +28,12 @@ def render(path, **kwargs):
 class index(object):
 
     def GET(self, name):
-        return render('main/index')
+        if name == 'about':
+            return render('main/about')
+        elif name == 'privacy':
+            return render('main/privacy')
+        else:
+            return render('main/index')
 
 
 class location(object):
@@ -32,6 +41,49 @@ class location(object):
     def GET(self, loc_hash):
         coords = Geohash(loc_hash).point()
         return render('main/location', coords=coords)
+
+
+class place(object):
+
+    myform = form.Form(
+        form.Textbox('name'),
+        form.Textbox('address'),
+        form.Textbox('description'),
+        form.Textbox('bitly_login'),
+        form.Textbox('bitly_apikey'),
+        form.Textbox('longitude'),
+        form.Textbox('latitude'))
+
+    def GET(self, model_id):
+        place = Place.get_by_id(int(model_id))
+        if place is None:
+            pass
+        else:
+            return render('main/place', place=place)
+
+    def POST(self):
+        f = place.myform()
+        if f.validates():
+            coords = float(f.d.get('longitude')), float(f.d.get('latitude'))
+            login = f.d.get('bitly_login')
+            apikey = f.d.get('bitly_apikey')
+
+            p = Place()
+            p.name = cgi.escape(f.d.get('name'))
+            p.address = cgi.escape(f.d.get('address'))
+            p.description = cgi.escape(f.d.get('description'))
+            p.geohash = str(Geohash(coords))
+            p.put()
+
+            model_id = p.key().id()
+            url = web.ctx.home + '/place/' + str(model_id)
+            p.bitly_hash = self._bitly_hash(url, login, apikey)
+        else:
+            pass
+        raise seeother(url)
+
+    def _bitly_hash(self, url, login, apikey):
+        pass
 
 
 if __name__ == '__main__':
