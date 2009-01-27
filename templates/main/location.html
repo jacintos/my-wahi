@@ -13,7 +13,23 @@
 <%def name="stylesheets()">
 <link rel="stylesheet" type="text/css" href="/css/openlayers/style.css" media="screen, projection" />
 </%def>
-<div id="map"></div>
+<div id="save-bookmark" class="span-8" style="display:none;">
+  <h2>Save Bookmark</h2>
+  <form action="/save" method="post">
+    <label for="name">Name</label>
+    <input class="text" type="text" name="name" id="name" />
+  <br/>
+    <label for="address">Address</label>
+    <input class="text" type="text" name="address" id="address" />
+  <br/>
+    <label for="description">Description <span style="font-size:0.8em;font-weight:normal;">(optional)</span></label>
+    <textarea class="text" name="description" id="description"></textarea>
+  <br/>
+    <button style="margin-right:4px;" type="submit">Bookmark</button>
+  </form>
+  <button id="cancel-bookmark">Cancel</button>
+</div>
+<div id="map" class="span-24 last"></div>
 <div id="tmp-coords">
   Coordinates:
   (<span id="coords-long" rel="geo:long">${coords[0]}</span>, 
@@ -28,13 +44,41 @@ google.load("maps", "2.x");
 <script type="text/javascript" src="/js/openlayers.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+var bound = false;
+function bindPromptHandlers() {
+    $("button#prompt-yes").click(function() {
+        $.hideDialog();
+        $("#map").removeClass("span-24").addClass("span-16");
+        $("#name").val("");
+        $("#address").val($(".title > h2").text());
+        $("#description").val("");
+        $("#save-bookmark").css("display", "block");
+        $("#name").focus();
+        $.centerMapOnPointer();
+    });
+    $("button#prompt-no").click(function() {
+        $.hideDialog();
+    });
+}
+function resetFullMap() {
+    $("#save-bookmark").css("display", "none");
+    $("#map").removeClass("span-16").addClass("span-24");
+    $.centerMapOnPointer();
+    return false;
+}
 $(document).ready(function() {
     $("#map").mapify(${coords[0]}, ${coords[1]}, function(lon, lat) {
         $("#coords-long").text(lon.toFixed(6));
         $("#coords-lat").text(lat.toFixed(6));
 
-        var content = "<h2>Bookmark this place?</h2><div><button style='margin-right:12px' type='submit'>Yes</button> <button type='submit'>No</button></div>";
+        if (!$("#map").hasClass("span-24"))
+            resetFullMap();
+        var content = "<h2>Bookmark this place?</h2><div><button style='margin-right:12px' id='prompt-yes'>Yes</button> <button id='prompt-no'>No</button></div>";
         $.promptDialog(content);
+        if (!bound) {
+            bindPromptHandlers();
+            bound = true;
+        }
     });
     $("#tmp-coords").clone().attr("id", "loc-coords").prependTo("#map").css({
         "font-family" : "Arial, sans-serif",
@@ -49,6 +93,7 @@ $(document).ready(function() {
     $.reverseGeocode(${coords[0]}, ${coords[1]}, function(placemarks) {
         $("#map").prepend("<div class='title'><h2>" + placemarks[0].address + "</h2></div>");
     });
+    $("#cancel-bookmark").click(resetFullMap);
 });
 //]]>
 </script>

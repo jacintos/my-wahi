@@ -104,7 +104,7 @@
             var size = new OpenLayers.Size(270, 100);
 
             popup = new OpenLayers.Popup.Anchored("prompt", coords, size, content, null, true, function() {this.hide()});
-            popup.setOpacity(0.8);
+            popup.setOpacity(0.85);
             map.addPopup(popup);
         } else {
             popup.hide();
@@ -112,6 +112,15 @@
             popup.contentHTML = content;
             popup.show();
         }
+    };
+
+    $.hideDialog = function() {
+        popup.hide();
+    };
+
+    $.centerMapOnPointer = function() {
+        var coords = new OpenLayers.LonLat(pointer.geometry.x, pointer.geometry.y);
+        map.setCenter(coords, 10);
     };
 
     function registerClickHandler() {

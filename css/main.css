@@ -37,6 +37,12 @@ button {
     width: 80px;
 }
 
+#save-bookmark button {
+    float: left;
+    padding: 4px 0;
+    width: 90px;
+}
+
 #location-results {
     background: transparent url(/img/white.png);
     display: none;
@@ -63,7 +69,6 @@ button {
     height: 400px;
     margin-top: 12px;
     position: relative;
-    width: 950px;
 }
 
 #map > div.title {
@@ -110,10 +115,13 @@ div.attrib > a:hover {
     padding-left: 1em;
 }
 
-input.text, textarea {
+input.text, textarea.text {
     background: white url(/img/inputbg.png) repeat-x scroll top left;
+    color: #222;
+    font-family: Arial, sans-serif;
     font-size: 1.4em;
-    letter-spacing: 0.02em;
+    font-weight: bold;
+    letter-spacing: 0.03em;
 }
 
 #ft ul {
@@ -136,11 +144,23 @@ input.text, textarea {
 }
 
 #map .olPopupContent button {
-    opacity: 1;
     padding: 2px 4px;
     width: 60px;
 }
 
 #map .olPopupCloseBox {
     background: transparent url(/img/close.png);
+}
+
+#save-bookmark label {
+    font-family: Helvetica, sans-serif;
+    font-size: 1.2em;
+}
+
+#save-bookmark input.text, #save-bookmark textarea.text {
+    width: 280px;
+}
+
+#save-bookmark textarea.text {
+    height: 100px;
 }
