@@ -56,23 +56,25 @@ button {
 #main-img {
     background: white url(/img/palacio_real.jpg);
     height:332px;
-    position: relative;
 }
 
 #map {
     height: 400px;
     margin-top: 12px;
+}
+
+#main-img, #static-img, #map {
     position: relative;
 }
 
-#map > div.title {
+#map > div.title, #static-img > div.title {
     left: 0;
     position: absolute;
     top: 0;
     z-index: 9999;
 }
 
-#main-img > div.title, #map > div.title {
+#main-img > div.title, #map > div.title, #static-img > div.title {
     background: transparent url(/img/black.png);
     height: 40px;
     width: 100%;
@@ -104,7 +106,7 @@ div.attrib > a:hover {
     text-decoration: underline;
 }
 
-#main-img h2, #map h2 {
+#main-img h2, #map h2, #static-img h2 {
     color: white;
     padding-left: 1em;
 }

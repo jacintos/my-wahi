@@ -65,7 +65,8 @@ class place(object):
         if place is None:
             pass
         else:
-            return render('main/place', place=place)
+            coords = Geohash(place.geohash).point()
+            return render('main/place', place=place, coords=coords)
 
     def POST(self):
         f = place.myform()
