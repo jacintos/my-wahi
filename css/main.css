@@ -181,3 +181,7 @@ input.text, textarea.text {
 .hidden {
     display: none;
 }
+
+#map #OpenLayers.Control.PanZoom_7_panup, #map #OpenLayers.Control.PanZoom_7_pandown, #map #OpenLayers.Control.PanZoom_7_panleft, #map #OpenLayers.Control.PanZoom_7_panright, #map #OpenLayers.Control.PanZoom_7_zoomworld {
+    display: none;
+}

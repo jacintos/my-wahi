@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="/css/openlayers/style.css" media="screen, projection" />
 </%def>
 <div id="save-bookmark" class="hidden span-8">
-  <h2>Bookmark Place</h2>
+  <h2>Bookmark this place</h2>
   <form action="/place" method="post">
     <label for="name">Name</label>
     <input class="text" type="text" name="name" id="name" />
@@ -76,6 +76,15 @@ function resetFullMap() {
     $.centerMapOnPointer();
     return false;
 }
+function fixMapControls() {
+    $("div[id=OpenLayers.Control.PanZoom_7_panup]").css("display","none");
+    $("div[id=OpenLayers.Control.PanZoom_7_panleft]").css("display","none");
+    $("div[id=OpenLayers.Control.PanZoom_7_panright]").css("display","none");
+    $("div[id=OpenLayers.Control.PanZoom_7_pandown]").css("display","none");
+    $("div[id=OpenLayers.Control.PanZoom_7_zoomworld]").css("display","none");
+    $("img[id=OpenLayers.Control.PanZoom_7_zoomin_innerImage]").attr("src","/img/zoomin.png");
+    $("img[id=OpenLayers.Control.PanZoom_7_zoomout_innerImage]").attr("src","/img/zoomout.png");
+}
 $(document).ready(function() {
     $("#map").mapify(${coords[0]}, ${coords[1]}, function(lon, lat) {
         $("#coords-long").text(lon.toFixed(6));
@@ -90,6 +99,7 @@ $(document).ready(function() {
             bound = true;
         }
     });
+    fixMapControls();
     $("#tmp-coords").clone().attr("id", "loc-coords").prependTo("#map").css({
         "font-family" : "Arial, sans-serif",
         "font-size" : "11px",
