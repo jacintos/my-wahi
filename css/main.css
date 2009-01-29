@@ -58,12 +58,17 @@ button {
     height:332px;
 }
 
+#about-img {
+    background: white url(/img/hawaii_sunset.jpg);
+    height: 250px;
+}
+
 #map {
     height: 400px;
     margin-top: 12px;
 }
 
-#main-img, #static-img, #map {
+#main-img, #static-img, #map, #about-img {
     position: relative;
 }
 
@@ -74,13 +79,13 @@ button {
     z-index: 9999;
 }
 
-#main-img > div.title, #map > div.title, #static-img > div.title {
+#main-img > div.title, #map > div.title, #static-img > div.title, #about-img > div.title{
     background: transparent url(/img/black.png);
     height: 40px;
     width: 100%;
 }
 
-#main-img > div.attrib {
+#main-img > div.attrib, #about-img > div.attrib {
     background: transparent url(/img/black.png);
     bottom: 0px;
     height: 24px;
@@ -106,7 +111,7 @@ div.attrib > a:hover {
     text-decoration: underline;
 }
 
-#main-img h2, #map h2, #static-img h2 {
+#main-img h2, #map h2, #static-img h2, #about-img h2 {
     color: white;
     padding-left: 1em;
 }
@@ -179,9 +184,5 @@ input.text, textarea.text {
 }
 
 .hidden {
-    display: none;
-}
-
-#map #OpenLayers.Control.PanZoom_7_panup, #map #OpenLayers.Control.PanZoom_7_pandown, #map #OpenLayers.Control.PanZoom_7_panleft, #map #OpenLayers.Control.PanZoom_7_panright, #map #OpenLayers.Control.PanZoom_7_zoomworld {
     display: none;
 }
