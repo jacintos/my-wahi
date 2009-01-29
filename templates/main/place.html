@@ -10,6 +10,7 @@
 <meta name="ICBM" content="${coords[1]}, ${coords[0]}" />
 <meta name="geo.position" content="${coords[1]};${coords[0]}" />
 </%def>
+<%def name="title()">my wahi | ${place.name</%def>
 <div id="static-img" class="span-12">
   <div class="title"><h2>${place.name}</h2></div>
   <img alt="${place.name} on the map" src="http://maps.google.com/staticmap?key=ABQIAAAAnnh3vADukoSiGDyFNhOAihT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRFihSNGE3faXJghnYraM8YXUr8aQ&center=${coords[1]},${coords[0]}&size=470x400&zoom=14&markers=${coords[1]},${coords[0]}" />

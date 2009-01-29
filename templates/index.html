@@ -39,6 +39,7 @@ ${self.stylesheets()}
       <a href="/"><img alt="My Wahi" src="/img/logo.png" /></a>
     </div>
     <div id="hd-2" class="span-12 last">
+      <img id="loading-img" class="hidden" alt="loading" src="/img/loading.gif" />
       <form action="#" id="location-search">
 	<input type="text" class="text" /><button type="submit">Search</button>
       </form>
@@ -77,6 +78,7 @@ $(document).ready(function() {
     var searchText = "Where on earth is it?";
 
     $("#location-search").submit(function() {
+        $("#loading-img").toggleClass("hidden");
         if ($("#location-results").css("display") != "none")
             $("#location-results").css("display", "none").empty();
         $("#location-search > input.text").searchForLoc(function(locs) {
@@ -86,6 +88,7 @@ $(document).ready(function() {
                 $("#location-results a:last").data("coords", loc.coords);
             });
             $("#location-results").css("display", "block");
+            $("#loading-img").toggleClass("hidden");
         });
         return false;
     });

@@ -53,6 +53,12 @@ button {
     list-style-type: none;
 }
 
+#loading-img {
+    position: absolute;
+    top: 8px;
+    left: 60px;
+}
+
 #main-img {
     background: white url(/img/palacio_real.jpg);
     height:332px;
