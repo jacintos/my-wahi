@@ -192,3 +192,7 @@ input.text, textarea.text {
 .hidden {
     display: none;
 }
+
+p {
+    font-size: 1.3em;
+}
