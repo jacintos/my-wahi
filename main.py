@@ -10,6 +10,7 @@ urls = (
     '/loc/(.*)', 'location',
     '/place', 'place',
     '/place/(\d+)', 'place',
+    '/places/recent', 'places',
 )
 
 app = web.application(urls, globals())

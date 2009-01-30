@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import cgi, web
+from datetime import datetime
 from django.utils import simplejson 
 from geohash import Geohash
 from google.appengine.api import urlfetch
@@ -9,7 +10,7 @@ from urllib import quote, urlencode
 from web.contrib.template import render_mako
 from web import form, seeother
 
-__all__ = ['index', 'about', 'privacy', 'location', 'place']
+__all__ = ['index', 'about', 'privacy', 'location', 'place', 'places']
 
 render_mako2 = render_mako(directories=['templates'],
                            input_encoding='utf-8',
@@ -108,6 +109,21 @@ class place(object):
             content = simplejson.loads(resp.content)
             if content.get('statusCode') == 'OK':
                 return content['results'][url].get('userHash')
+
+
+class places(object):
+
+    def GET(self):
+        query = Place.all()
+        places = query.order('-created_at').fetch(limit=100)
+        base_url = web.ctx.home + '/place/'
+        for place in places:
+            place.url = base_url + str(place.key().id())
+            place.long, place.lat = Geohash(place.geohash).point()
+            place.updated_at = place.created_at
+        web.header('Content-Type', 'application/atom+xml')
+        updated_at = datetime.now()
+        return render('atom/recent', updated_at=updated_at, places=places)
 
 
 def my_internal_error():
