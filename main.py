@@ -3,8 +3,6 @@
 import web
 from controllers import *
 
-#web.config.debug = False
-
 urls = (
     '/', 'index',
     '/about', 'about',

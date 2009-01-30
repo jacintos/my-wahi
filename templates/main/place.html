@@ -10,7 +10,7 @@
 <meta name="ICBM" content="${coords[1]}, ${coords[0]}" />
 <meta name="geo.position" content="${coords[1]};${coords[0]}" />
 </%def>
-<%def name="title()">my wahi | ${place.name</%def>
+<%def name="title()">my wahi | ${place.name}</%def>
 <div id="static-img" class="span-12">
   <div class="title"><h2>${place.name}</h2></div>
   <img alt="${place.name} on the map" src="http://maps.google.com/staticmap?key=ABQIAAAAnnh3vADukoSiGDyFNhOAihT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRFihSNGE3faXJghnYraM8YXUr8aQ&center=${coords[1]},${coords[0]}&size=470x400&zoom=14&markers=${coords[1]},${coords[0]}" />
@@ -25,5 +25,7 @@
     (<span id="coords-long" rel="geo:long">${coords[0]}</span>, 
     <span id="coords-lat" rel="geo:lat">${coords[1]}</span>)
   </div>
-  <p>bit.ly: <a href="http://bit.ly/${place.bitly_hash}" rel="nofollow">http://bit.ly/${place.bitly_hash}</a></p>
+% if place.bitly_hash is not None:
+  <div>bit.ly: <a href="http://bit.ly/${place.bitly_hash}" rel="nofollow">http://bit.ly/${place.bitly_hash}</a></div>
+% endif
 </div>

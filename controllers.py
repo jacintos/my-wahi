@@ -84,6 +84,11 @@ class place(object):
             model_id = p.key().id()
             url = web.ctx.home + '/place/' + str(model_id)
             p.bitly_hash = self._bitly_hash(url, login, apikey)
+
+            if p.bitly_hash is None:
+                # Try again in case user's account was junk
+                p.bitly_hash = self._bitly_hash(url, place.mylogin,
+                                                place.myapikey)
             p.put()
         else:
             pass
@@ -106,7 +111,7 @@ class place(object):
 
 
 def my_internal_error():
-    return web.notfound(render('main/500'))
+    return web.internalerror(render('main/500'))
 
 
 def my_not_found():
