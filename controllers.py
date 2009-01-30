@@ -10,7 +10,7 @@ from urllib import quote, urlencode
 from web.contrib.template import render_mako
 from web import form, seeother
 
-__all__ = ['index', 'about', 'privacy', 'location', 'place', 'places']
+__all__ = ['index', 'about', 'privacy', 'location', 'place', 'recent']
 
 render_mako2 = render_mako(directories=['templates'],
                            input_encoding='utf-8',
@@ -111,7 +111,7 @@ class place(object):
                 return content['results'][url].get('userHash')
 
 
-class places(object):
+class recent(object):
 
     def GET(self):
         query = Place.all()

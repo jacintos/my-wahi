@@ -9,8 +9,8 @@ urls = (
     '/privacy', 'privacy',
     '/loc/(.*)', 'location',
     '/place', 'place',
+    '/place/recent', 'recent',
     '/place/(\d+)', 'place',
-    '/places/recent', 'places',
 )
 
 app = web.application(urls, globals())
