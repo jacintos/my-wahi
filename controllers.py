@@ -103,3 +103,15 @@ class place(object):
             content = simplejson.loads(resp.content)
             if content.get('statusCode') == 'OK':
                 return content['results'][url].get('userHash')
+
+
+def my_internal_error():
+    return web.notfound(render('main/500'))
+
+
+def my_not_found():
+    return web.notfound(render('main/404'))
+
+
+web.webapi.internalerror = my_internal_error
+web.webapi.notfound = my_not_found
