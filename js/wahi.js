@@ -1,6 +1,6 @@
 (function($) {
 
-    var apiKey = "ABQIAAAAnnh3vADukoSiGDyFNhOAihT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRFihSNGE3faXJghnYraM8YXUr8aQ";
+    var apiKey = "ABQIAAAAtO1hv_X8SmlsRtfq49PGKxT3sD9sIctxrza221FRMo2Z44skZRQ4f1MSp3hry72oNc6rOHDBZidScA";
     var mapOptions;
     var map;
     var pointer, pointerLayer;
