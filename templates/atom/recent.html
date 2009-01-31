@@ -1,0 +1,33 @@
+## -*- mode: xml -*-
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:georss="http://www.georss.org/georss" 
+      xmlns:gml="http://www.opengis.net/gml">
+  <title>my wahi</title>
+  <subtitle>Recently added places</subtitle>
+  <link href="http://kouwahi.appspot.com/" />
+  <link rel="self" href="http://kouwahi.appspot.com/place/recent" />
+  <id>http://kouwahi.appspot.com/</id>
+  <updated>${updated_at.strftime('%Y-%m-%dT%H:%M:%S')}</updated>
+  <author>
+    <name>Jacinto Shy, Jr.</name>
+  </author>
+  <rights>public domain</rights>
+% for place in places:
+  <entry>
+    <title>${place.name}</title>
+    <link href="${place.url}" />
+    <id>${place.url}</id>
+    <updated>${place.updated_at.strftime('%Y-%m-%dT%H:%M:%S')}</updated>
+    <published>${place.created_at.strftime('%Y-%m-%dT%H:%M:%S')}</published>
+% if place.description:
+    <summary>
+      ${place.description}
+    </summary>
+% endif
+    <georss:where>
+      <gml:Point><gml:pos>${place.lat} ${place.long}</gml:pos></gml:Point>
+    </georss:where>
+  </entry>
+% endfor
+</feed>

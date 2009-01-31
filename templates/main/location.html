@@ -57,11 +57,17 @@ google.load("maps", "2.x");
 var bound = false;
 function bindPromptHandlers() {
     $("button#prompt-yes").click(function() {
+        var tmp;
+
         $.hideDialog();
         $("#map").removeClass("span-24").addClass("span-16");
         $("#name").val("");
         $("#address").val($(".title > h2").text());
         $("#description").val("");
+        if ((tmp = $.cookie("bitly_login")) != null)
+            $("#bitly_login").val(tmp);
+        if ((tmp = $.cookie("bitly_apikey")) != null)
+            $("#bitly_apikey").val(tmp);
         $("#save-bookmark").css("display", "block");
         $("#name").focus();
         $.centerMapOnPointer();
@@ -117,6 +123,10 @@ $(document).ready(function() {
     $("#save-bookmark > form").submit(function() {
         $("input[name=longitude]").val($("#coords-long").text());
         $("input[name=latitude]").val($("#coords-lat").text());
+        if ($("#bitly_login").val() != $.cookie("bitly_login"))
+            $.cookie("bitly_login", $("#bitly_login").val());
+        if ($("#bitly_apikey").val() != $.cookie("bitly_apikey"))
+            $.cookie("bitly_apikey", $("#bitly_apikey").val());
         return true;
     });
     $("#toggle-bitly").click(function() {
@@ -125,4 +135,5 @@ $(document).ready(function() {
 });
 //]]>
 </script>
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>
 </%def>

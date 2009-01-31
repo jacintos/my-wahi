@@ -5,6 +5,7 @@
     var map;
     var pointer, pointerLayer;
     var popup;
+    var places, placeLayer;
     var selLocCallback;
 
     $.fn.searchForLoc = function(fn) {
@@ -56,9 +57,12 @@
         } else {
             console.log("Incompatible with Google maps");
         }
-        $.pointToLoc(new OpenLayers.Geometry.Point(coords.lon, coords.lat));
+
         selLocCallback = fn;
+        setUpPlaceLayer();
         registerClickHandler();
+        map.events.register("moveend", map, requestPlaces);
+        $.pointToLoc(new OpenLayers.Geometry.Point(coords.lon, coords.lat));
         return this;
     };
 
@@ -123,6 +127,31 @@
         map.setCenter(coords, 10);
     };
 
+    function setUpPlaceLayer() {
+        var placeStyle = new OpenLayers.Style({
+            externalGraphic: "/img/place.png",
+            graphicYOffset : -12,
+            pointRadius: 10,
+            cursor: "pointer"
+        });
+        var placeStyleMap = new OpenLayers.StyleMap({
+            "default": placeStyle
+        });
+
+        places = new OpenLayers.Format.GeoJSON({
+            internalProjection: mapOptions.displayProjection,
+            externalProjection: mapOptions.projection
+        });
+        placeLayer = new OpenLayers.Layer.Vector("places", {
+            projection: mapOptions.projection,
+            isBaseLayer: false,
+            styleMap: placeStyleMap
+        });
+
+        map.addLayer(placeLayer);
+        requestPlaces();
+    }
+
     function registerClickHandler() {
         var handler = new OpenLayers.Handler.Click({map : map}, {
             click : function(e) {
@@ -145,6 +174,20 @@
         });
         handler.setMap(map);
         handler.activate();
+    }
+
+    function requestPlaces() {
+        var bounds = map.getExtent();
+
+        bounds.transform(mapOptions.displayProjection, mapOptions.projection);
+        $.getJSON("/place/within", {bbox: bounds.toBBOX()}, function(resp) {
+            if (resp.type == "FeatureCollection") {
+                placeLayer.destroyFeatures();
+                placeLayer.addFeatures(places.read(resp, "FeatureCollection"));
+            } else {
+                console.log("Didn't get expected result");
+            }
+        });
     }
 
 })(jQuery);

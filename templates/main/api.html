@@ -1,0 +1,67 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/index.html" />
+<%def name="title()">my wahi API</%def>
+<h2>API</h2>
+<p>While <em>my wahi</em> does not have a formal web API, I have done my
+best to design things for easy developer access. Unless otherwise
+specified, all coordinates here use <a href="http://en.wikipedia.org/wiki/WGS84" rel="nofollow">WGS 84</a> (EPSG:4326).</p>
+
+<h3>Recently bookmarked places</h3>
+<div class="api-method">
+<strong>HTTP method:</strong> GET<br/>
+<strong>Resource:</strong> http://kouwahi.appspot.com/place/recent<br/>
+<strong>Results:</strong><br/>
+Atom 1.0 feed with embedded <a href="http://georss.org/" rel="nofollow">GeoRSS-GML</a>. Currently, only the most recent 100 places are provided.
+</div>
+
+<h3>Bookmark a new place</h3>
+<div class="api-method">
+<strong>HTTP method:</strong> POST<br/>
+<strong>Resource:</strong> http://kouwahi.appspot.com/place<br/>
+<strong>Arguments:</strong>
+<div class="query-args">
+  <dl>
+    <dt>name</dt><dd>Name.</dd>
+  </dl>
+  <dl>
+    <dt>longitude</dt><dd>Longitude.</dd>
+  </dl>
+  <dl>
+    <dt>latitude</dt><dd>Latitude.</dd>
+  </dl>
+  <dl>
+    <dt>address</dt><dd>User-defined address.</dd>
+  </dl>
+  <dl>
+    <dt>description</dt><dd>(optional) Description.</dd>
+  </dl>
+  <dl>
+    <dt>bitly_login</dt><dd>(optional) bit.ly login.</dd>
+  </dl>
+  <dl>
+    <dt>bitly_apikey</dt><dd>(optional) bit.ly API key.</dd>
+  </dl>
+</div>
+
+<h3>Find bookmarked places within bounds</h3>
+<div class="api-method">
+<strong>HTTP method:</strong> GET<br/>
+<strong>Resource:</strong> http://kouwahi.appspot.com/place/within<br/>
+<strong>Arguments:</strong>
+<div class="query-args">
+  <dl>
+    <dt>bbox</dt>
+    <dd>Comma-delimited set of coordinates for upper-left and lower-right of a bounding box to search within (ordering is longitude, latitude).</dd>
+  </dl>
+</div>
+<strong>Results:</strong><br/>
+<a href="http://wiki.geojson.org/GeoJSON_draft_version_6" rel="nofollow">GeoJSON</a> FeatureCollection. Note that the coordinate order is again longitude, latitude.<br/>
+Properties within each feature (place) include the following:
+<ul>
+  <li>id - Internal id.</li>
+  <li>hash - bit.ly hash.</li>
+  <li>name - Name.</li>
+  <li>address - Address.</li>
+</ul>
+</div>
+<br/>

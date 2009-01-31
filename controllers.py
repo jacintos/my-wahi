@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import cgi, web
+from datetime import datetime
 from django.utils import simplejson 
 from geohash import Geohash
 from google.appengine.api import urlfetch
@@ -9,7 +10,8 @@ from urllib import quote, urlencode
 from web.contrib.template import render_mako
 from web import form, seeother
 
-__all__ = ['index', 'about', 'privacy', 'location', 'place']
+__all__ = ['index', 'about', 'privacy', 'api', 'location', 'place', 'recent',
+           'within']
 
 render_mako2 = render_mako(directories=['templates'],
                            input_encoding='utf-8',
@@ -38,6 +40,12 @@ class privacy(object):
         return render('main/privacy')
 
 
+class api(object):
+
+    def GET(self):
+        return render('main/api')
+
+
 class location(object):
 
     def GET(self, loc_hash):
@@ -62,7 +70,7 @@ class place(object):
     def GET(self, model_id):
         place = Place.get_by_id(int(model_id))
         if place is None:
-            pass
+            raise web.webapi.notfound()
         else:
             coords = Geohash(place.geohash).point()
             return render('main/place', place=place, coords=coords)
@@ -91,7 +99,7 @@ class place(object):
                                                 place.myapikey)
             p.put()
         else:
-            pass
+            raise web.webapi.badrequest()
         raise seeother(url)
 
     def _bitly_hash(self, url, login, apikey):
@@ -110,13 +118,84 @@ class place(object):
                 return content['results'][url].get('userHash')
 
 
+class recent(object):
+
+    def GET(self):
+        query = Place.all()
+        places = query.order('-created_at').fetch(limit=100)
+        base_url = web.ctx.home + '/place/'
+        for place in places:
+            place.url = base_url + str(place.key().id())
+            place.long, place.lat = Geohash(place.geohash).point()
+            place.updated_at = place.created_at
+        web.header('Content-Type', 'application/atom+xml')
+        updated_at = datetime.now()
+        return render('atom/recent', updated_at=updated_at, places=places)
+
+
+class within(object):
+
+    def GET(self):
+        i = web.webapi.input(bbox=None)
+        if i.bbox is None:
+            raise web.badrequest()
+
+        try:
+            coords = [float(s) for s in i.bbox.split(',')]
+        except Exception:
+            raise web.badrequest()
+
+        if len(coords) != 4:
+            raise web.badrequest()
+
+        tl = str(Geohash((coords[0], coords[1])))
+        br = str(Geohash((coords[2], coords[3])))
+        query = Place.all()
+        query.filter('geohash >', tl).filter('geohash <', br)
+        res = {
+            'type' : 'FeatureCollection',
+            'crs' : {
+                'type' : 'EPSG',
+                'properties' : { 
+                    'code' : 4326,
+                    'coordinate_order' : [1, 0]
+                }
+            }
+        }
+        features = []
+        for p in query:
+            coords = Geohash(p.geohash).point()
+            features.append({
+                'type' : 'Feature',
+                'geometry' : {
+                    'type' : 'Point',
+                    'coordinates' : coords
+                },
+                'properties' : {
+                    'name' : p.name,
+                    'address' : p.address,
+                    'id' : p.key().id(),
+                    'hash' : p.bitly_hash,
+                }
+            })
+        res['features'] = features
+
+        web.header('Content-Type', 'application/json')
+        return simplejson.dumps(res)
+        
+
 def my_internal_error():
-    return web.internalerror(render('main/500'))
+    return web.internalerror(render('error/500'))
 
 
 def my_not_found():
-    return web.notfound(render('main/404'))
+    return web.notfound(render('error/404'))
+
+
+def my_bad_request():
+    return web.badrequest(render('error/400'))
 
 
 web.webapi.internalerror = my_internal_error
 web.webapi.notfound = my_not_found
+web.webapi.badrequest = my_bad_request
