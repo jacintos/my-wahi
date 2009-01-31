@@ -7,9 +7,11 @@ urls = (
     '/', 'index',
     '/about', 'about',
     '/privacy', 'privacy',
+    '/api', 'api',
     '/loc/(.*)', 'location',
     '/place', 'place',
     '/place/recent', 'recent',
+    '/place/within', 'within',
     '/place/(\d+)', 'place',
 )
 

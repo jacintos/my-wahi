@@ -10,7 +10,8 @@ from urllib import quote, urlencode
 from web.contrib.template import render_mako
 from web import form, seeother
 
-__all__ = ['index', 'about', 'privacy', 'location', 'place', 'recent']
+__all__ = ['index', 'about', 'privacy', 'api', 'location', 'place', 'recent',
+           'within']
 
 render_mako2 = render_mako(directories=['templates'],
                            input_encoding='utf-8',
@@ -37,6 +38,12 @@ class privacy(object):
 
     def GET(self):
         return render('main/privacy')
+
+
+class api(object):
+
+    def GET(self):
+        return render('main/api')
 
 
 class location(object):
@@ -125,6 +132,57 @@ class recent(object):
         updated_at = datetime.now()
         return render('atom/recent', updated_at=updated_at, places=places)
 
+
+class within(object):
+
+    def GET(self):
+        i = web.webapi.input(bbox=None)
+        if i.bbox is None:
+            raise web.badrequest()
+
+        try:
+            coords = [float(s) for s in i.bbox.split(',')]
+        except Exception:
+            raise web.badrequest()
+
+        if len(coords) != 4:
+            raise web.badrequest()
+
+        tl = str(Geohash((coords[0], coords[1])))
+        br = str(Geohash((coords[2], coords[3])))
+        query = Place.all()
+        query.filter('geohash >', tl).filter('geohash <', br)
+        res = {
+            'type' : 'FeatureCollection',
+            'crs' : {
+                'type' : 'EPSG',
+                'properties' : { 
+                    'code' : 4326,
+                    'coordinate_order' : [1, 0]
+                }
+            }
+        }
+        features = []
+        for p in query:
+            coords = Geohash(p.geohash).point()
+            features.append({
+                'type' : 'Feature',
+                'geometry' : {
+                    'type' : 'Point',
+                    'coordinates' : coords
+                },
+                'properties' : {
+                    'name' : p.name,
+                    'address' : p.address,
+                    'id' : p.key().id(),
+                    'hash' : p.bitly_hash,
+                }
+            })
+        res['features'] = features
+
+        web.header('Content-Type', 'application/json')
+        return simplejson.dumps(res)
+        
 
 def my_internal_error():
     return web.internalerror(render('error/500'))

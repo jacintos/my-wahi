@@ -196,3 +196,24 @@ input.text, textarea.text {
 p {
     font-size: 1.3em;
 }
+
+h3 {
+    margin: 1.5em 0 0.5em 0;
+}
+
+.api-method > strong {
+    font-family: Helvetica, sans-serif;
+    font-size: 1.1em;
+}
+
+.api-method > .query-args {
+    margin-left: 2em;
+}
+
+.api-method > ul {
+    padding-left: 2em;
+}
+
+.query-args > dl, .api-method > ul {
+    margin: 0;
+}
