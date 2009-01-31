@@ -29,7 +29,7 @@
     (<span id="coords-long" rel="geo:long">${coords[0]}</span>, 
     <span id="coords-lat" rel="geo:lat">${coords[1]}</span>)
   </div>
-  <div>Geohash: <span id="geohash">${place.geohash}</span>q</div>
+  <div>Geohash: <a id="geohash" href="/loc/${place.geohash}">${place.geohash}</a></div>
 % if place.bitly_hash is not None:
   <div>bit.ly hash: <a href="http://bit.ly/info/${place.bitly_hash}" rel="nofollow">${place.bitly_hash}</a></div>
 % endif
