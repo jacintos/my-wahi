@@ -127,15 +127,15 @@ class recent(object):
 
 
 def my_internal_error():
-    return web.internalerror(render('main/500'))
+    return web.internalerror(render('error/500'))
 
 
 def my_not_found():
-    return web.notfound(render('main/404'))
+    return web.notfound(render('error/404'))
 
 
 def my_bad_request():
-    return web.badrequest(render('main/400'))
+    return web.badrequest(render('error/400'))
 
 
 web.webapi.internalerror = my_internal_error
