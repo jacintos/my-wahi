@@ -63,7 +63,7 @@ class place(object):
     def GET(self, model_id):
         place = Place.get_by_id(int(model_id))
         if place is None:
-            pass
+            raise web.webapi.notfound()
         else:
             coords = Geohash(place.geohash).point()
             return render('main/place', place=place, coords=coords)
@@ -92,7 +92,7 @@ class place(object):
                                                 place.myapikey)
             p.put()
         else:
-            pass
+            raise web.webapi.badrequest()
         raise seeother(url)
 
     def _bitly_hash(self, url, login, apikey):
@@ -134,5 +134,10 @@ def my_not_found():
     return web.notfound(render('main/404'))
 
 
+def my_bad_request():
+    return web.badrequest(render('main/400'))
+
+
 web.webapi.internalerror = my_internal_error
 web.webapi.notfound = my_not_found
+web.webapi.badrequest = my_bad_request
