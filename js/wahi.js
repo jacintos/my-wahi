@@ -59,8 +59,8 @@
         }
 
         selLocCallback = fn;
-        setUpPlaceLayer();
         registerClickHandler();
+        setUpPlaceLayer();
         map.events.register("moveend", map, requestPlaces);
         $.pointToLoc(new OpenLayers.Geometry.Point(coords.lon, coords.lat));
         return this;
@@ -103,19 +103,16 @@
     $.promptDialog = function(content) {
         var pixel = new OpenLayers.Pixel(940, 50);
         var coords = map.getLonLatFromViewPortPx(pixel);
+        var size = new OpenLayers.Size(270, 100);
 
-        if (!popup) {
-            var size = new OpenLayers.Size(270, 100);
-
-            popup = new OpenLayers.Popup.Anchored("prompt", coords, size, content, null, true, function() {this.hide()});
-            popup.setOpacity(0.85);
-            map.addPopup(popup);
-        } else {
+        if (popup) {
             popup.hide();
-            popup.lonlat = coords;
-            popup.contentHTML = content;
-            popup.show();
+            popup.destroy();
         }
+
+        popup = new OpenLayers.Popup.Anchored("prompt", coords, size, content, null, true, function() {this.hide()});
+        popup.setOpacity(0.85);
+        map.addPopup(popup);
     };
 
     $.hideDialog = function() {
@@ -148,7 +145,13 @@
             styleMap: placeStyleMap
         });
 
+        var selectPlace = new OpenLayers.Control.SelectFeature(placeLayer, {
+            callbacks: {click: showPlaceDialog}
+        });
+
         map.addLayer(placeLayer);
+        map.addControl(selectPlace);
+        selectPlace.activate();
         requestPlaces();
     }
 
@@ -188,6 +191,13 @@
                 console.log("Didn't get expected result");
             }
         });
+    }
+
+    function showPlaceDialog(feature) {
+        var attr = feature.attributes;
+        var content = "<h3><a href='/place/" + attr.id + "'>" + attr.name + "</a></h3>" + attr.address;
+
+        $.promptDialog(content);
     }
 
 })(jQuery);
