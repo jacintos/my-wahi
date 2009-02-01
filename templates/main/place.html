@@ -17,18 +17,16 @@
 </div>
 <div class="span-12 last">
   <h3>${place.address}</h3>
-  <div id="place-abusive">
-    <a id="abusive" title="Flag this page as spam or abusive" href="#">Offensive?</a>
-  </div>
 % if place.description:
   <p>${place.description}</p>
 % endif
+  <div id="place-abusive">
+    <a id="abusive" title="Flag this page as spam or abusive" href="#">Offensive?</a>
+  </div>
   <div id="place-meta">
-% if tags:
     <div id="place-tags">
-     <strong>Tags:</strong> <span>${', '.join(tags)}</span>
+      <strong>Tags:</strong> <span>${', '.join(tags)}</span>
     </div>
-% endif
     <div id="add-place-tags">Add tags</div>
     <form class="hidden" id="place-tags-form" action="#">
       <input class="text" type="text" name="tags" id="tags" /><button type="submit">Add</button>
