@@ -124,7 +124,7 @@
 
     $.centerMapOnPointer = function() {
         var coords = new OpenLayers.LonLat(pointer.geometry.x, pointer.geometry.y);
-        map.setCenter(coords, 10);
+        map.setCenter(coords, map.zoom);
     };
 
     function setUpPlaceLayer() {
