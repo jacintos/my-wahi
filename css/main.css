@@ -201,10 +201,6 @@ p {
     font-size: 1.3em;
 }
 
-h3 {
-    margin: 1.5em 0 0.5em 0;
-}
-
 .api-method > strong {
     font-family: Helvetica, sans-serif;
     font-size: 1.1em;
@@ -233,4 +229,12 @@ h3 {
 
 .place-ref {
     font-size: 1.4em;
+}
+
+#disqus_thread {
+    margin-top: 4em;
+}
+
+#disqus_thread #dsq-content h3 {
+    font-size: 1.2em;
 }
