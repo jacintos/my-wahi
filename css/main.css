@@ -1,4 +1,8 @@
 
+a:hover {
+    color: blue;
+}
+
 body {
     margin: 0 auto;
     width: 950px;
@@ -221,4 +225,8 @@ p {
 #add-place-tags {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.place-ref {
+    font-size: 1.4em;
 }

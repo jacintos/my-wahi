@@ -74,7 +74,8 @@ class place(object):
         else:
             place.id = model_id
             coords = Geohash(place.geohash).point()
-            return render('main/place', place=place, coords=coords)
+            tags = ['<a href="/tag/' + quote(t) + '">' + t + '</a>' for t in place.tags]
+            return render('main/place', place=place, coords=coords, tags=tags)
 
     def POST(self):
         f = place.myform()
@@ -214,7 +215,10 @@ class addtags(object):
 class tag(object):
 
     def GET(self, name):
-        return ''
+        query = Place.all()
+        query.filter('tags =', name).order('-created_at')
+        places = query.fetch(100)
+        return render('main/tagged', name=name, places=places)
 
 
 def my_internal_error():

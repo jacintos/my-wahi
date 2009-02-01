@@ -15,7 +15,7 @@ urls = (
     '/place/tags/(\d+)', 'addtags',
     '/place/within', 'within',
     '/place/(\d+)', 'place',
-    '/tag/(\w+)', 'tag',
+    '/tag/([\w\s]+)', 'tag',
 )
 
 app = web.application(urls, globals())

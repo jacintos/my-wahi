@@ -1,0 +1,10 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/index.html" />
+<h2>Places tagged &quot;${name}&quot;</h2>
+<p>${len(places)} result(s)</p>
+% for place in places:
+<div class="place-ref">
+  <a href="/place/${place.key().id()}">${place.name}</a>, ${place.address}
+</div>
+% endfor
+<br/>

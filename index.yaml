@@ -15,3 +15,10 @@ indexes:
   properties:
   - name: created_at
     direction: desc
+
+# Used 9 times in query history.
+- kind: Place
+  properties:
+  - name: tags
+  - name: created_at
+    direction: desc
