@@ -39,8 +39,11 @@
 % if place.bitly_hash is not None:
     <strong>bit.ly hash:</strong> <a href="http://bit.ly/info/${place.bitly_hash}" rel="nofollow">${place.bitly_hash}</a><br/>
 % endif
+  </div>
+  <div id="disqus_thread"></div>
 </div>
 <%def name="javascripts()">
+<script type="text/javascript" src="http://disqus.com/forums/kouwahi/embed.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
