@@ -1,11 +1,11 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="/index.html" />
-<%def name="html()">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+<%def name="html()"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xml:lang="en">
-</%def>
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xml:lang="en"></%def>
+<%def name="keywords()"><meta name="keywords" content="my wahi, kou wahi" /></%def>
+<%def name="description()"><meta name="description" content="${place.name} bookmarked in my wahi." /></%def>
 <%def name="meta()">
 <meta name="ICBM" content="${coords[1]}, ${coords[0]}" />
 <meta name="geo.position" content="${coords[1]};${coords[0]}" />
@@ -21,16 +21,58 @@
 % if place.description:
   <p>${place.description}</p>
 % endif
-  <div>
-    <a title="Flag this page as spam or abusive" href="#">Offensive?</a>
+  <div id="place-abusive">
+    <a id="abusive" title="Flag this page as spam or abusive" href="#">Offensive?</a>
   </div>
-  <div id="tmp-coords">
-    Coordinates:
+  <div id="place-meta">
+    <div id="place-tags">
+      <strong>Tags:</strong> <span>${', '.join(tags)}</span>
+    </div>
+    <div id="add-place-tags">Add tags</div>
+    <form class="hidden" id="place-tags-form" action="#">
+      <input class="text" type="text" name="tags" id="tags" /><button type="submit">Add</button>
+    </form>
+    <strong>Coordinates:</strong>
     (<span id="coords-long" rel="geo:long">${coords[0]}</span>, 
-    <span id="coords-lat" rel="geo:lat">${coords[1]}</span>)
-  </div>
-  <div>Geohash: <a id="geohash" href="/loc/${place.geohash}">${place.geohash}</a></div>
+    <span id="coords-lat" rel="geo:lat">${coords[1]}</span>)<br/>
+    <strong>Geohash:</strong> <span id="geohash">${place.geohash}</span><br/>
 % if place.bitly_hash is not None:
-  <div>bit.ly hash: <a href="http://bit.ly/info/${place.bitly_hash}" rel="nofollow">${place.bitly_hash}</a></div>
+    <strong>bit.ly hash:</strong> <a href="http://bit.ly/info/${place.bitly_hash}" rel="nofollow">${place.bitly_hash}</a><br/>
 % endif
 </div>
+<%def name="javascripts()">
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $("a#abusive").click(function() {
+        $.post("/place/abusive/${place.id}");
+        return false;
+    });
+    $("#add-place-tags").click(function() {
+        $("#place-tags-form").toggleClass("hidden");
+    });
+    $("#place-tags-form").submit(function() {
+        var curtags = $("#place-tags > span").text();
+        var newtags = []
+
+        if (!$("#place-tags-form").hasClass("hidden"))
+            $("#place-tags-form").addClass("hidden");
+
+        $("#tags").val().split(",").forEach(function(tag) {
+            tag = $.trim(tag);
+            newtags.push("<a href='" + encodeURIComponent(tag) + "'>" + tag + "</a>");
+        });
+        newtags = newtags.join(", ");
+
+        if (curtags == "")
+            $("#place-tags > span").html(newtags);
+        else
+            $("#place-tags > span").append(", " + newtags);
+        $.post("/place/tags/${place.id}", {tags: $("#tags").val()});
+        $("#tags").val("");
+        return false;
+    });
+});
+//]]>
+</script>
+</%def>

@@ -11,7 +11,7 @@ from web.contrib.template import render_mako
 from web import form, seeother
 
 __all__ = ['index', 'about', 'privacy', 'api', 'location', 'place', 'recent',
-           'within']
+           'within', 'abusive', 'addtags', 'tag']
 
 render_mako2 = render_mako(directories=['templates'],
                            input_encoding='utf-8',
@@ -72,8 +72,10 @@ class place(object):
         if place is None:
             raise web.webapi.notfound()
         else:
+            place.id = model_id
             coords = Geohash(place.geohash).point()
-            return render('main/place', place=place, coords=coords)
+            tags = ['<a href="/tag/' + quote(t) + '">' + t + '</a>' for t in place.tags]
+            return render('main/place', place=place, coords=coords, tags=tags)
 
     def POST(self):
         f = place.myform()
@@ -182,7 +184,42 @@ class within(object):
 
         web.header('Content-Type', 'application/json')
         return simplejson.dumps(res)
-        
+
+
+class abusive(object):
+
+    def POST(self, model_id):
+        place = Place.get_by_id(int(model_id))
+        if place is None:
+            raise web.notfound()
+
+        place.abusive = True
+        place.put()
+        return '{"code":200}'
+
+
+class addtags(object):
+
+    def POST(self, model_id):
+        place = Place.get_by_id(int(model_id))
+        if place is None:
+            raise web.notfound()
+
+        i = web.webapi.input(tags=None)
+        ts = [t.strip() for t in i.tags.split(',')]
+        place.tags.extend(ts)
+        place.put()
+        return '{"code":200}'
+
+
+class tag(object):
+
+    def GET(self, name):
+        query = Place.all()
+        query.filter('tags =', name).order('-created_at')
+        places = query.fetch(100)
+        return render('main/tagged', name=name, places=places)
+
 
 def my_internal_error():
     return web.internalerror(render('error/500'))

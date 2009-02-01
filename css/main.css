@@ -1,4 +1,8 @@
 
+a:hover {
+    color: blue;
+}
+
 body {
     margin: 0 auto;
     width: 950px;
@@ -30,7 +34,7 @@ button {
     cursor: pointer;
 }
 
-#location-search > button {
+#location-search > button, #place-tags-form > button {
     height: 32px;
     line-height: 32px;
     margin: 0 0 0 10px;
@@ -216,4 +220,17 @@ h3 {
 
 .query-args > dl, .api-method > ul {
     margin: 0;
+}
+
+#place-meta {
+    margin-top: 2em;
+}
+
+#add-place-tags {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.place-ref {
+    font-size: 1.4em;
 }

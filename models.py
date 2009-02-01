@@ -13,3 +13,5 @@ class Place(db.Model):
     bitly_hash = db.StringProperty()
     geohash = db.StringProperty()
     created_at = db.DateTimeProperty(auto_now_add=True)
+    abusive = db.BooleanProperty(default=False)
+    tags = db.StringListProperty()
